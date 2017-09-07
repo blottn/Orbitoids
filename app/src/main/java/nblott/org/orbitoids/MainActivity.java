@@ -65,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         attachOrbitoid(getOrbitoid(Orbitoid.Pos.BL, 1,1));
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private View createView() {
         return null;
     }
