@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         space = (ConstraintLayout) findViewById(R.id.space);
-
         orbitoids = new ArrayList<Orbitoid>();
 
         int x = 100;
@@ -41,13 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         LayoutInflater inflater = getLayoutInflater();
 
-        root = inflater.inflate(R.layout.orbitoid, null);
-
-        root.setX(200);
-
-        Orbitoid orbitoid = new Orbitoid(root, 0, 1);
-
-        attachOrbitoid(orbitoid);
 
 
         ticker = new Runnable() {
@@ -62,7 +55,17 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mHandler.postDelayed(ticker, delay);
-        attachOrbitoid(getOrbitoid(Orbitoid.Pos.BL, 1,1));
+
+
+        //spawn 30
+        for (int i = 0 ; i < 30 ; i++ ) {
+            Random random = new Random();
+            attachOrbitoid(getOrbitoid(Orbitoid.Pos.TL,random.nextFloat()*10 + 4,random.nextFloat()*10 + 4));
+        }
+
+
+
+//        attachOrbitoid(getOrbitoid(Orbitoid.Pos.BL, 6,6));
     }
 
 
@@ -79,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
     // vel x and vely are
     private Orbitoid getOrbitoid(Orbitoid.Pos pos, float dX, float dY) {
         View root = getLayoutInflater().inflate(R.layout.orbitoid, null);
-        Orbitoid orbitoid = new Orbitoid(root,1,1);
+        Orbitoid orbitoid = new Orbitoid(root,dX,dY);
         if (pos.equals(Orbitoid.Pos.BL)) {
-            root.setX(space.getWidth() - 100);
+            root.setX(space.getWidth());
             root.setY(0);
         } else if (pos.equals(Orbitoid.Pos.BR)){
 
@@ -100,6 +103,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void tick() {
         for (Orbitoid orbitoid : orbitoids) {
+            if (orbitoid.root.getX() + orbitoid.velX + 255 > 1080) { // check right
+                orbitoid.velX = -orbitoid.velX;
+            }
+            if (orbitoid.root.getX() + orbitoid.velX < 0) { // check left
+                orbitoid.velX = -orbitoid.velX;
+            }
+            if (orbitoid.root.getY() + orbitoid.velY < 0) { // check up
+                orbitoid.velY = -orbitoid.velY;
+            }
+            if (orbitoid.root.getY() + orbitoid.velY + 310 > 1720) { // check down
+                orbitoid.velY = -orbitoid.velY;
+            }
             orbitoid.root.setX(orbitoid.root.getX() + orbitoid.velX);
             orbitoid.root.setY(orbitoid.root.getY() + orbitoid.velY);
         }
