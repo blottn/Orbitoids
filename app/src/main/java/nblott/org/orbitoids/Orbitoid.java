@@ -14,7 +14,6 @@ public class Orbitoid {
 
     public float velX;
     public float velY;
-    public float rotation;
     public int width;
     public int height;
     public View root;
@@ -23,7 +22,6 @@ public class Orbitoid {
         this.root = root;
         this.velX = velX;
         this.velY = velY;
-        System.out.println("Width: " + root.getWidth());
         this.width = root.getWidth();
         this.height = root.getHeight();
     }
